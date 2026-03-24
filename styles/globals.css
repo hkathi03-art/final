@@ -295,6 +295,13 @@ body.sb-collapsed .main-wrap{margin-left:0!important}
 .auth-tabs{display:flex;background:var(--bg);border-radius:var(--r-sm);padding:.22rem;margin-bottom:1.4rem;gap:.2rem}
 .auth-tab{flex:1;text-align:center;padding:.6rem;border-radius:7px;cursor:pointer;font-size:.83rem;font-weight:500;color:var(--text3);transition:all .2s}
 .auth-tab.active{background:var(--surface);color:var(--text);font-weight:700;box-shadow:var(--shadow-sm)}
+.auth-link-btn{margin:.8rem auto 0;display:block;background:transparent;border:none;color:var(--yellow-dk);font-weight:700;font-size:.78rem;cursor:pointer}
+.auth-link-btn:hover{text-decoration:underline}
+
+.maya-fab{position:fixed;right:1.2rem;bottom:1.2rem;z-index:850;border:none;border-radius:999px;background:linear-gradient(135deg,var(--yellow) 0%,var(--yellow-dk) 100%);color:#111;padding:.78rem 1rem;display:flex;align-items:center;gap:.5rem;font-weight:800;font-size:.8rem;box-shadow:0 14px 28px rgba(0,0,0,.28),0 0 0 1px rgba(17,17,17,.12);cursor:pointer;transition:transform .2s,box-shadow .2s}
+.maya-fab i{font-size:.95rem}
+.maya-fab:hover{transform:translateY(-2px);box-shadow:0 20px 32px rgba(0,0,0,.32),0 0 0 1px rgba(17,17,17,.15)}
+@media(max-width:560px){.maya-fab{padding:.78rem;width:46px;height:46px;justify-content:center}.maya-fab span{display:none}}
 
 /* ── DASHBOARD ───────────────────────────── */
 .dash-body{max-width:1100px;margin:0 auto;padding:2rem 2rem 5rem}

@@ -8,7 +8,7 @@ import { signInDemoStudent } from '../lib/demoAuth'
 
 export default function Login() {
   const router  = useRouter()
-  const { signIn, signUp, user } = useAuth()
+  const { signIn, signUp, resetPassword, user } = useAuth()
   const toast   = useToast()
   const [tab, setTab]     = useState('login')
   const [loading, setLoading] = useState(false)
@@ -72,6 +72,22 @@ export default function Login() {
     }
   }
 
+  async function handleForgotPassword() {
+    if (!liEmail) {
+      setMsg({ type:'error', text:'Enter your email first, then click Forgot Password.' })
+      return
+    }
+    setLoading(true); setMsg(null)
+    try {
+      await resetPassword(liEmail)
+      setMsg({ type:'success', text:'Password reset email sent. Check your inbox for the reset link.' })
+    } catch (e) {
+      setMsg({ type:'error', text: e.message })
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <div className="main-wrap">
       <div className="auth-wrap">
@@ -104,6 +120,9 @@ export default function Login() {
               </div>
               <button className="btn btn-primary btn-full" onClick={doLogin} disabled={loading}>
                 {loading ? 'Signing in…' : 'Sign In'}
+              </button>
+              <button className="auth-link-btn" onClick={handleForgotPassword} disabled={loading}>
+                Forgot Password?
               </button>
             </>
           ) : (
@@ -138,7 +157,7 @@ export default function Login() {
 
           <div className="divider">or class demo login</div>
           <div className="form-group" style={{marginBottom:0}}>
-            <label className="form-label">Real Login for 10 Students</label>
+            <label className="form-label">Quick Student Login</label>
             <select className="form-input" defaultValue="" onChange={e => {
               const selected = DEMO_STUDENTS.find(s => s.key === e.target.value)
               if (selected) demoLogin(selected)

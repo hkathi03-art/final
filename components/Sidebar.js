@@ -11,18 +11,10 @@ export default function Sidebar({ open, onClose }) {
     onClose()
   }
 
-  function goLC() {
-    if (router.pathname !== '/') { router.push('/?lc=1') }
-    else { document.getElementById('lcSection')?.scrollIntoView({ behavior:'smooth', block:'start' }) }
-    onClose()
-  }
-
   const items = [
     { icon:'fa-gauge',         label:'Dashboard', href:'/dashboard' },
     { icon:'fa-house',         label:'Home',      href:'/' },
-    { icon:'fa-timeline',      label:'Life Cycle', action: goLC },
     { icon:'fa-building',      label:'Housing',   href:'/housing' },
-    { icon:'fa-robot',         label:'Ask Maya',  href:'/chatbot' },
     { icon:'fa-user-group',    label:'Mentorship',href:'/mentorship' },
     { icon:'fa-comment-dots',  label:'Messages',  href:'/messages' },
     { icon:'fa-book-open',     label:'Resources', href:'/resources' },
