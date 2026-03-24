@@ -1,0 +1,160 @@
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
+import { useAuth } from '../lib/useAuth'
+import { useToast } from '../components/Toast'
+import { DEMO_STUDENTS, DEMO_PASS } from '../lib/data'
+import { supabase } from '../lib/supabase'
+import { signInDemoStudent } from '../lib/demoAuth'
+
+export default function Login() {
+  const router  = useRouter()
+  const { signIn, signUp, user } = useAuth()
+  const toast   = useToast()
+  const [tab, setTab]     = useState('login')
+  const [loading, setLoading] = useState(false)
+  const [msg, setMsg]     = useState(null)
+
+  useEffect(() => {
+    if (user) router.replace('/dashboard')
+  }, [user, router])
+
+  if (user) return null
+
+  // Login form state
+  const [liEmail, setLiEmail] = useState('')
+  const [liPass,  setLiPass]  = useState('')
+
+  // Signup form state
+  const [suName,    setSuName]    = useState('')
+  const [suCountry, setSuCountry] = useState('')
+  const [suMajor,   setSuMajor]   = useState('')
+  const [suEmail,   setSuEmail]   = useState('')
+  const [suPass,    setSuPass]    = useState('')
+
+  async function doLogin() {
+    if (!liEmail || !liPass) { setMsg({ type:'error', text:'Please enter email and password' }); return }
+    setLoading(true); setMsg(null)
+    try {
+      await signIn(liEmail, liPass)
+      toast('Welcome back! 👋', 'success')
+      router.push('/dashboard')
+    } catch(e) {
+      setMsg({ type:'error', text: e.message })
+    } finally { setLoading(false) }
+  }
+
+  async function doSignUp() {
+    if (!suName || !suEmail || !suPass) { setMsg({ type:'error', text:'Please fill in all required fields' }); return }
+    if (suPass.length < 8) { setMsg({ type:'error', text:'Password must be at least 8 characters' }); return }
+    setLoading(true); setMsg(null)
+    try {
+      await signUp(suEmail, suPass, suName, suCountry, suMajor)
+      setMsg({ type:'success', text:'Account created! Check your email to confirm, then sign in.' })
+      setTab('login')
+    } catch(e) {
+      setMsg({ type:'error', text: e.message })
+    } finally { setLoading(false) }
+  }
+
+  async function demoLogin(d) {
+    setLoading(true); setMsg(null)
+    try {
+      const { created } = await signInDemoStudent(supabase, d, DEMO_PASS)
+      if (created) {
+        toast(`Created and signed in ${d.name} ✅`, 'success')
+      }
+      toast(`Signed in as ${d.name} 🎓`, 'success')
+      router.push('/dashboard')
+    } catch(e) {
+      setMsg({ type:'error', text: 'Demo login error: ' + e.message })
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div className="main-wrap">
+      <div className="auth-wrap">
+        <div className="auth-card">
+          <div style={{textAlign:'center',marginBottom:'1.4rem'}}>
+            <div className="auth-icon" style={{display:'inline-flex'}}>🎓</div>
+            <div className="auth-title">BSU International Portal</div>
+            <div className="auth-sub">{tab === 'login' ? 'Sign in to your account' : 'Create your student account'}</div>
+          </div>
+
+          <div className="auth-tabs">
+            <div className={`auth-tab${tab==='login'?' active':''}`} onClick={() => { setTab('login'); setMsg(null) }}>Sign In</div>
+            <div className={`auth-tab${tab==='signup'?' active':''}`} onClick={() => { setTab('signup'); setMsg(null) }}>Create Account</div>
+          </div>
+
+          {msg && <div className={msg.type === 'error' ? 'error-box' : 'success-box'}>{msg.text}</div>}
+
+          {tab === 'login' ? (
+            <>
+              <div className="form-group">
+                <label className="form-label">Email</label>
+                <input className="form-input" type="email" placeholder="you@students.bowiestate.edu"
+                  value={liEmail} onChange={e => setLiEmail(e.target.value)} autoComplete="email"/>
+              </div>
+              <div className="form-group">
+                <label className="form-label">Password</label>
+                <input className="form-input" type="password" placeholder="Your password"
+                  value={liPass} onChange={e => setLiPass(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && doLogin()}/>
+              </div>
+              <button className="btn btn-primary btn-full" onClick={doLogin} disabled={loading}>
+                {loading ? 'Signing in…' : 'Sign In'}
+              </button>
+            </>
+          ) : (
+            <>
+              <div className="form-group">
+                <label className="form-label">Full Name *</label>
+                <input className="form-input" placeholder="Your full name" value={suName} onChange={e => setSuName(e.target.value)}/>
+              </div>
+              <div className="form-2col">
+                <div className="form-group">
+                  <label className="form-label">Country</label>
+                  <input className="form-input" placeholder="e.g. Nigeria" value={suCountry} onChange={e => setSuCountry(e.target.value)}/>
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Major</label>
+                  <input className="form-input" placeholder="e.g. Computer Science" value={suMajor} onChange={e => setSuMajor(e.target.value)}/>
+                </div>
+              </div>
+              <div className="form-group">
+                <label className="form-label">Email *</label>
+                <input className="form-input" type="email" placeholder="you@students.bowiestate.edu" value={suEmail} onChange={e => setSuEmail(e.target.value)}/>
+              </div>
+              <div className="form-group">
+                <label className="form-label">Password *</label>
+                <input className="form-input" type="password" placeholder="At least 8 characters" value={suPass} onChange={e => setSuPass(e.target.value)} onKeyDown={e => e.key === 'Enter' && doSignUp()}/>
+              </div>
+              <button className="btn btn-primary btn-full" onClick={doSignUp} disabled={loading}>
+                {loading ? 'Creating account…' : 'Create Account'}
+              </button>
+            </>
+          )}
+
+          <div className="divider">or class demo login</div>
+          <div className="form-group" style={{marginBottom:0}}>
+            <label className="form-label">Real Login for 10 Students</label>
+            <select className="form-input" defaultValue="" onChange={e => {
+              const selected = DEMO_STUDENTS.find(s => s.key === e.target.value)
+              if (selected) demoLogin(selected)
+              e.target.value = ''
+            }} disabled={loading}>
+              <option value="">Choose a demo student…</option>
+              {DEMO_STUDENTS.map(d => (
+                <option key={d.key} value={d.key}>{d.name} — {d.country}</option>
+              ))}
+            </select>
+            <div style={{fontSize:'.72rem',marginTop:'.45rem',color:'var(--text3)'}}>
+              First click creates the account automatically. Next click signs in instantly.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
