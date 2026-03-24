@@ -3,13 +3,36 @@ import { DEMO_STUDENTS } from '../../lib/data'
 
 const DEMO_EMAILS = new Set(DEMO_STUDENTS.map((student) => student.email))
 
+function firstNonEmpty(...values) {
+  return values.find((value) => typeof value === 'string' && value.trim().length > 0) || null
+}
+
+function normalizeUrl(url) {
+  if (!url) return null
+  return url.trim().replace(/\/$/, '')
+}
+
 function getAdminClient() {
-  const projectRef = process.env.NEXT_PUBLIC_SUPABASE_PROJECT_ID || process.env.SUPABASE_PROJECT_ID
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || (projectRef ? `https://${projectRef}.supabase.co` : null)
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY
+  const projectRef = firstNonEmpty(
+    process.env.NEXT_PUBLIC_SUPABASE_PROJECT_ID,
+    process.env.SUPABASE_PROJECT_ID,
+  )
+
+  const url = normalizeUrl(firstNonEmpty(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.NEXT_PUBLIC_SUPABASE_PROJECT_URL,
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_PROJECT_URL,
+  )) || (projectRef ? `https://${projectRef}.supabase.co` : null)
+
+  const serviceRoleKey = firstNonEmpty(
+    process.env.SUPABASE_SERVICE_ROLE_KEY,
+    process.env.SUPABASE_SERVICE_ROLE,
+    process.env.SUPABASE_SECRET_KEY,
+  )
 
   if (!url || !serviceRoleKey) {
-    throw new Error('Demo auth server is not configured.')
+    throw new Error('Demo auth server is not configured. Set SUPABASE URL and service-role key env vars.')
   }
 
   return createClient(url, serviceRoleKey, {
