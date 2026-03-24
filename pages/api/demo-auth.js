@@ -4,8 +4,9 @@ import { DEMO_STUDENTS } from '../../lib/data'
 const DEMO_EMAILS = new Set(DEMO_STUDENTS.map((student) => student.email))
 
 function getAdminClient() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+  const projectRef = process.env.NEXT_PUBLIC_SUPABASE_PROJECT_ID || process.env.SUPABASE_PROJECT_ID
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || (projectRef ? `https://${projectRef}.supabase.co` : null)
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY
 
   if (!url || !serviceRoleKey) {
     throw new Error('Demo auth server is not configured.')

@@ -16,7 +16,7 @@ npm run dev
 ## Deploy to Vercel (3 steps)
 
 1. Push to GitHub
-2. Import repo on vercel.com → add the 4 env vars from `.env.example`
+2. Import repo on vercel.com → add the required env vars from `.env.example` (`NEXT_PUBLIC_SUPABASE_URL` or `NEXT_PUBLIC_SUPABASE_PROJECT_ID`, plus anon/publishable key, service-role/secret key, and Gemini key)
 3. Deploy — Root Directory: **blank**
 
 ## Supabase Setup
