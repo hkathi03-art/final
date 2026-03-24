@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import { useAuth } from '../lib/useAuth'
 import Navbar from './Navbar'
 import Sidebar from './Sidebar'
+import MayaFab from './MayaFab'
 
 export default function Layout({ children }) {
   const [sbOpen, setSbOpen] = useState(false)
@@ -68,6 +69,7 @@ export default function Layout({ children }) {
       <div className="main-wrap">
         {children}
       </div>
+      <MayaFab />
     </>
   )
 }
