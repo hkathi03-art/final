@@ -31,7 +31,6 @@ export default function AdminDashboard() {
 
   const staffView = useMemo(() => {
     if (!user?.email) return false
-    if (user?.isAdmin) return true
     const email = user.email.toLowerCase()
     const major = (user.major || '').toLowerCase()
     return (
