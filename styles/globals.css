@@ -327,7 +327,6 @@ body.sb-collapsed .main-wrap{margin-left:0!important}
 
 /* ── ADMIN DASHBOARD ────────────────────── */
 .admin-body{max-width:1200px}
-.admin-nav-row{display:flex;gap:.55rem;flex-wrap:wrap;margin-bottom:1rem}
 .admin-note i{color:#854d0e}
 .admin-kpi-grid .kpi-card{cursor:default}
 .admin-kpi-grid .kpi-card:hover{transform:none;box-shadow:var(--shadow-sm)}
