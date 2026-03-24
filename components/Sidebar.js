@@ -11,7 +11,7 @@ export default function Sidebar({ open, onClose }) {
     onClose()
   }
 
-  const items = [
+  const baseItems = [
     { icon:'fa-gauge',         label:'Dashboard', href:'/dashboard' },
     { icon:'fa-user-shield',   label:'Admin',     href:'/admin' },
     { icon:'fa-house',         label:'Home',      href:'/' },
@@ -21,6 +21,10 @@ export default function Sidebar({ open, onClose }) {
     { icon:'fa-book-open',     label:'Resources', href:'/resources' },
     { icon:'fa-circle-question',label:'FAQ',      href:'/faq' },
   ]
+
+  const items = user?.isAdmin 
+    ? [...baseItems, { icon:'fa-user-shield', label:'Admin', href:'/admin' }]
+    : baseItems
 
   return (
     <>
@@ -59,12 +63,22 @@ export default function Sidebar({ open, onClose }) {
                 <div>
                   <div className="sb-user-name">{user.name}</div>
                   <div className="sb-user-role">{user.major}</div>
+                  {user.isAdmin && <div className="sb-user-admin">Staff/Faculty</div>}
                 </div>
               </div>
             </div>
           )}
         </aside>
       </div>
+
+      <style jsx>{`
+        .sb-user-admin {
+          font-size: 0.7rem;
+          color: #ffd700;
+          font-weight: bold;
+          margin-top: 2px;
+        }
+      `}</style>
     </>
   )
 }
