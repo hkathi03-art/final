@@ -36,7 +36,6 @@ export default function Navbar({ onHamburger, sidebarCollapsed = false }) {
 
   const navLinks = [
     { href:'/',           label:'Home',       icon:'fa-house',          active: page === 'home' },
-    { href:null,          label:'Lifecycle',  icon:'fa-timeline',       active: false, action: 'lifecycle' },
     { href:'/housing',    label:'Housing',    icon:'fa-building',       active: page === 'housing' },
     { href:'/mentorship', label:'Mentorship', icon:'fa-user-group',     active: page === 'mentorship' },
     { href:'/resources',  label:'Resources',  icon:'fa-book',           active: page === 'resources' },
@@ -45,13 +44,7 @@ export default function Navbar({ onHamburger, sidebarCollapsed = false }) {
   ]
 
   function handleNavClick(link) {
-    if (link.action === 'lifecycle') {
-      if (router.pathname !== '/') { router.push('/?lc=1') } else {
-        document.getElementById('lcSection')?.scrollIntoView({ behavior:'smooth', block:'start' })
-      }
-    } else {
-      router.push(link.href)
-    }
+    router.push(link.href)
   }
 
   return (
@@ -86,7 +79,7 @@ export default function Navbar({ onHamburger, sidebarCollapsed = false }) {
             }}
             disabled={demoBusy}
           >
-            <option value="">Real Login (10 Students)</option>
+            <option value="">Quick Student Login</option>
             {DEMO_STUDENTS.map(d => (
               <option key={d.key} value={d.key}>{d.name}</option>
             ))}
