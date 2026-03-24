@@ -50,8 +50,8 @@ export default function AdminDashboard() {
         profilesRes,
         listingsRes,
       ] = await Promise.all([
-        supabase.from('profiles').select('*', { count: 'exact', head: true }),
-        supabase.from('student_listings').select('*', { count: 'exact', head: true }),
+        supabase.from('profiles').select('id', { count: 'estimated', head: true }),
+        supabase.from('student_listings').select('id', { count: 'estimated', head: true }),
         supabase.from('profiles').select('id, full_name, email, major, country, created_at').order('created_at', { ascending: false }).limit(8),
         supabase.from('student_listings').select('id, title, location, price, user_id, created_at').order('created_at', { ascending: false }).limit(8),
       ])

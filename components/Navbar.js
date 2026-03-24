@@ -1,38 +1,13 @@
-import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useAuth } from '../lib/useAuth'
 import { useTheme } from '../lib/useTheme'
-import { useToast } from './Toast'
-import { DEMO_STUDENTS, DEMO_PASS } from '../lib/data'
-import { supabase } from '../lib/supabase'
-import { signInDemoStudent } from '../lib/demoAuth'
 
 export default function Navbar({ onHamburger, sidebarCollapsed = false }) {
   const router = useRouter()
   const { user, signOut } = useAuth()
   const { theme, toggleTheme } = useTheme()
-  const toast = useToast()
-  const [demoBusy, setDemoBusy] = useState(false)
-  const [demoSelected, setDemoSelected] = useState('')
 
   const page = router.pathname.replace('/', '') || 'home'
-
-  async function handleDemoSwitch(key) {
-    if (!key || demoBusy) return
-    const d = DEMO_STUDENTS.find(s => s.key === key)
-    if (!d) return
-
-    setDemoBusy(true)
-    try {
-      const { created } = await signInDemoStudent(supabase, d, DEMO_PASS)
-      toast(created ? `${d.name} account created & signed in` : `Signed in as ${d.name}`, 'success')
-      router.push('/dashboard')
-    } catch (e) {
-      toast(`Demo login failed: ${e.message}`, 'error')
-    } finally {
-      setDemoBusy(false)
-    }
-  }
 
   const navLinks = [
     { href:'/',           label:'Home',       icon:'fa-house',          active: page === 'home' },
@@ -69,24 +44,6 @@ export default function Navbar({ onHamburger, sidebarCollapsed = false }) {
       </div>
 
       <div className="nav-right">
-        <div className="demo-switcher">
-          <i className="fas fa-user-graduate" />
-          <select
-            value={demoSelected}
-            onChange={e => {
-              const key = e.target.value
-              setDemoSelected('')
-              handleDemoSwitch(key)
-            }}
-            disabled={demoBusy}
-          >
-            <option value="">Quick Student Login</option>
-            {DEMO_STUDENTS.map(d => (
-              <option key={d.key} value={d.key}>{d.name}</option>
-            ))}
-          </select>
-        </div>
-
         <button className="theme-btn" onClick={toggleTheme} aria-label="Toggle theme">
           <i className={`fas ${theme === 'dark' ? 'fa-sun' : 'fa-moon'}`} />
         </button>
