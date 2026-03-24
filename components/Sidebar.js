@@ -13,6 +13,7 @@ export default function Sidebar({ open, onClose }) {
 
   const items = [
     { icon:'fa-gauge',         label:'Dashboard', href:'/dashboard' },
+    { icon:'fa-user-shield',   label:'Admin',     href:'/admin' },
     { icon:'fa-house',         label:'Home',      href:'/' },
     { icon:'fa-building',      label:'Housing',   href:'/housing' },
     { icon:'fa-user-group',    label:'Mentorship',href:'/mentorship' },
