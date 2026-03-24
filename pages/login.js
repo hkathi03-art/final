@@ -2,9 +2,6 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useAuth } from '../lib/useAuth'
 import { useToast } from '../components/Toast'
-import { DEMO_STUDENTS, DEMO_PASS } from '../lib/data'
-import { supabase } from '../lib/supabase'
-import { signInDemoStudent } from '../lib/demoAuth'
 
 export default function Login() {
   const router  = useRouter()
@@ -54,22 +51,6 @@ export default function Login() {
     } catch(e) {
       setMsg({ type:'error', text: e.message })
     } finally { setLoading(false) }
-  }
-
-  async function demoLogin(d) {
-    setLoading(true); setMsg(null)
-    try {
-      const { created } = await signInDemoStudent(supabase, d, DEMO_PASS)
-      if (created) {
-        toast(`Created and signed in ${d.name} ✅`, 'success')
-      }
-      toast(`Signed in as ${d.name} 🎓`, 'success')
-      router.push('/dashboard')
-    } catch(e) {
-      setMsg({ type:'error', text: 'Demo login error: ' + e.message })
-    } finally {
-      setLoading(false)
-    }
   }
 
   async function handleForgotPassword() {
@@ -155,23 +136,6 @@ export default function Login() {
             </>
           )}
 
-          <div className="divider">or class demo login</div>
-          <div className="form-group" style={{marginBottom:0}}>
-            <label className="form-label">Quick Student Login</label>
-            <select className="form-input" defaultValue="" onChange={e => {
-              const selected = DEMO_STUDENTS.find(s => s.key === e.target.value)
-              if (selected) demoLogin(selected)
-              e.target.value = ''
-            }} disabled={loading}>
-              <option value="">Choose a demo student…</option>
-              {DEMO_STUDENTS.map(d => (
-                <option key={d.key} value={d.key}>{d.name} — {d.country}</option>
-              ))}
-            </select>
-            <div style={{fontSize:'.72rem',marginTop:'.45rem',color:'var(--text3)'}}>
-              First click creates the account automatically. Next click signs in instantly.
-            </div>
-          </div>
         </div>
       </div>
     </div>
