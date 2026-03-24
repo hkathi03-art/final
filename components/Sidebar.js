@@ -19,6 +19,7 @@ export default function Sidebar({ open, onClose }) {
     { icon:'fa-comment-dots',  label:'Messages',  href:'/messages' },
     { icon:'fa-book-open',     label:'Resources', href:'/resources' },
     { icon:'fa-circle-question',label:'FAQ',      href:'/faq' },
+    { icon:'fa-user-shield',   label:'Admin',    href:'/admin' },
   ]
 
   return (
