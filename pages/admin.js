@@ -45,6 +45,7 @@ export default function AdminDashboard() {
 
   if (loading) return <Layout><div>Loading...</div></Layout>
   if (!user) return <Layout><div className="admin-error">Please sign in to access the Admin Dashboard.</div></Layout>
+  if (!user.isAdmin) return <Layout><div className="admin-error">Access Denied. Only staff and faculty can view the Admin Dashboard.</div></Layout>
 
   return (
     <Layout>
