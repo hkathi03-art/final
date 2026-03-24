@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useAuth } from '../lib/useAuth'
 import { useToast } from '../components/Toast'
+import { supabase } from '../lib/supabase'
 
 export default function Login() {
   const router  = useRouter()
@@ -10,6 +11,7 @@ export default function Login() {
   const [tab, setTab]     = useState('login')
   const [loading, setLoading] = useState(false)
   const [msg, setMsg]     = useState(null)
+  const [loginAs, setLoginAs] = useState('student')
 
   useEffect(() => {
     if (user) router.replace('/dashboard')
@@ -32,9 +34,29 @@ export default function Login() {
     if (!liEmail || !liPass) { setMsg({ type:'error', text:'Please enter email and password' }); return }
     setLoading(true); setMsg(null)
     try {
-      await signIn(liEmail, liPass)
+      const authUser = await signIn(liEmail, liPass)
+      const email = (authUser?.email || liEmail || '').toLowerCase()
+      const { data: profile } = authUser?.id
+        ? await supabase.from('profiles').select('role, major').eq('id', authUser.id).maybeSingle()
+        : { data: null }
+      const role = (profile?.role || '').toLowerCase()
+      const major = (profile?.major || '').toLowerCase()
+      const isAdmin = (
+        role === 'admin' ||
+        role === 'staff' ||
+        role === 'faculty' ||
+        (email.endsWith('@bowiestate.edu') && !email.includes('@students.')) ||
+        major.includes('staff') ||
+        major.includes('faculty')
+      )
+
+      if (loginAs === 'admin' && !isAdmin) {
+        setMsg({ type: 'error', text: 'This account is not authorized as Admin/Staff.' })
+        return
+      }
+
       toast('Welcome back! 👋', 'success')
-      router.push('/dashboard')
+      router.push(loginAs === 'admin' ? '/admin' : '/dashboard')
     } catch(e) {
       setMsg({ type:'error', text: e.message })
     } finally { setLoading(false) }
@@ -88,6 +110,22 @@ export default function Login() {
 
           {tab === 'login' ? (
             <>
+              <div className="auth-role-switch" role="tablist" aria-label="Sign-in role">
+                <button
+                  type="button"
+                  className={`auth-role-btn${loginAs === 'student' ? ' active' : ''}`}
+                  onClick={() => setLoginAs('student')}
+                >
+                  Sign in as Student
+                </button>
+                <button
+                  type="button"
+                  className={`auth-role-btn${loginAs === 'admin' ? ' active' : ''}`}
+                  onClick={() => setLoginAs('admin')}
+                >
+                  Sign in as Admin
+                </button>
+              </div>
               <div className="form-group">
                 <label className="form-label">Email</label>
                 <input className="form-input" type="email" placeholder="you@students.bowiestate.edu"

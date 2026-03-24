@@ -8,6 +8,7 @@ export default function Navbar({ onHamburger, sidebarCollapsed = false }) {
   const { theme, toggleTheme } = useTheme()
 
   const page = router.pathname.replace('/', '') || 'home'
+  const showBack = router.pathname !== '/'
 
   const navLinks = [
     { href:'/',           label:'Home',       icon:'fa-house',          active: page === 'home' },
@@ -33,6 +34,18 @@ export default function Navbar({ onHamburger, sidebarCollapsed = false }) {
         <div className="nav-logo-badge">BSU</div>
         <span className="nav-logo-name">International Portal</span>
       </a>
+
+      {showBack && (
+        <button
+          className="nav-back-btn"
+          onClick={() => router.back()}
+          aria-label="Go back"
+          title="Go back"
+        >
+          <i className="fas fa-arrow-left" />
+          Back
+        </button>
+      )}
 
       <div className="nav-links">
         {navLinks.map(link => (
