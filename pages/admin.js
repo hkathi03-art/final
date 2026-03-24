@@ -52,16 +52,8 @@ export default function AdminDashboard() {
       ] = await Promise.all([
         supabase.from('profiles').select('*', { count: 'exact', head: true }),
         supabase.from('student_listings').select('*', { count: 'exact', head: true }),
-        supabase
-          .from('profiles')
-          .select('id, full_name, email, major, country, created_at')
-          .order('created_at', { ascending: false })
-          .limit(8),
-        supabase
-          .from('student_listings')
-          .select('id, title, location, price, user_id, created_at')
-          .order('created_at', { ascending: false })
-          .limit(8),
+        supabase.from('profiles').select('id, full_name, email, major, country, created_at').order('created_at', { ascending: false }).limit(8),
+        supabase.from('student_listings').select('id, title, location, price, user_id, created_at').order('created_at', { ascending: false }).limit(8),
       ])
 
       if (profilesCountRes.error) throw profilesCountRes.error
@@ -80,11 +72,7 @@ export default function AdminDashboard() {
       setListingCount(toInt(listingsCountRes.count))
       setRecentProfiles(loadedProfiles)
       setRecentListings(listingsRes.data || [])
-      setCountryMix(
-        Object.entries(countries)
-          .sort((a, b) => b[1] - a[1])
-          .slice(0, 6)
-      )
+      setCountryMix(Object.entries(countries).sort((a, b) => b[1] - a[1]).slice(0, 6))
     } catch (e) {
       setError(e.message || 'Unable to load admin oversight data.')
     } finally {
@@ -118,9 +106,7 @@ export default function AdminDashboard() {
 
       <div>
         <div className="dash-welcome">
-          <h1>
-            Admin Dashboard <span>Oversight Hub</span>
-          </h1>
+          <h1>Admin Dashboard <span>Oversight Hub</span></h1>
           <p>
             Monitor student engagement, housing activity, and mentorship capacity in one place.
           </p>
@@ -170,9 +156,7 @@ export default function AdminDashboard() {
             </div>
 
             {recentProfiles.length === 0 ? (
-              <p className="admin-empty">
-                {busy ? 'Loading profile records...' : 'No profile records found yet.'}
-              </p>
+              <p className="admin-empty">{busy ? 'Loading profile records...' : 'No profile records found yet.'}</p>
             ) : (
               <div className="admin-table-wrap">
                 <table className="admin-table">
@@ -208,9 +192,7 @@ export default function AdminDashboard() {
             </div>
 
             {recentListings.length === 0 ? (
-              <p className="admin-empty">
-                {busy ? 'Loading listings...' : 'No listings to review yet.'}
-              </p>
+              <p className="admin-empty">{busy ? 'Loading listings...' : 'No listings to review yet.'}</p>
             ) : (
               <div className="admin-table-wrap">
                 <table className="admin-table">
@@ -241,9 +223,7 @@ export default function AdminDashboard() {
             <h3>Student Country Distribution (Top 6)</h3>
           </div>
           {countryMix.length === 0 ? (
-            <p className="admin-empty">
-              {busy ? 'Analyzing country mix...' : 'No country information available yet.'}
-            </p>
+            <p className="admin-empty">{busy ? 'Analyzing country mix...' : 'No country information available yet.'}</p>
           ) : (
             <div className="country-pills">
               {countryMix.map(([country, count]) => (

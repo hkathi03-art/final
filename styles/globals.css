@@ -67,6 +67,8 @@ body.sb-collapsed .main-wrap{margin-left:0!important}
 
 /* ── NAVBAR ───────────────────────────────── */
 #navbar{position:sticky;top:0;z-index:600;height:var(--nb);padding:0 1.5rem;display:flex;align-items:center;gap:.85rem;background:var(--black);border-bottom:3px solid var(--yellow)}
+/* Defensive guard: in case a route accidentally mounts layout twice, hide duplicate stacked navbars. */
+#navbar + #navbar{display:none!important}
 .nav-logo{display:flex;align-items:center;gap:10px;cursor:pointer;flex-shrink:0}
 .nav-logo-badge{background:var(--yellow);color:#111;font-weight:900;font-size:.76rem;letter-spacing:.06em;padding:.28rem .75rem;border-radius:7px}
 .nav-logo-name{color:rgba(255,255,255,.82);font-size:.9rem;font-weight:600}
