@@ -36,6 +36,7 @@ export default function Navbar({ onHamburger, sidebarCollapsed = false }) {
 
   const navLinks = [
     { href:'/',           label:'Home',       icon:'fa-house',          active: page === 'home' },
+    { href:'/admin',      label:'Admin',      icon:'fa-user-shield',    active: page === 'admin' },
     { href:'/housing',    label:'Housing',    icon:'fa-building',       active: page === 'housing' },
     { href:'/mentorship', label:'Mentorship', icon:'fa-user-group',     active: page === 'mentorship' },
     { href:'/resources',  label:'Resources',  icon:'fa-book',           active: page === 'resources' },
