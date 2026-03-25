@@ -1,32 +1,34 @@
-# BSU International Student Portal v4
+# Browser Embroidery Digitizer (MVP)
 
-Full-stack Next.js 14 portal for Bowie State University international students.
+Production-quality MVP built with Next.js.
 
-## Quick Start
+## Features
+
+- Upload raster artwork (`png`, `jpg`, `webp`)
+- Auto-digitize edge-based running stitches
+- Control hoop size, stitch density, stitch length, jump threshold, smoothing, and thread color
+- Stitch simulation playback in-browser canvas
+- Machine-plan exports (`.json` and `.csv`)
+- Local project persistence via `localStorage`
+
+## Getting Started
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/bsu-portal.git
-cd bsu-portal
-cp .env.example .env.local
 npm install
 npm run dev
-# Open http://localhost:3000
 ```
 
-## Deploy to Vercel (3 steps)
+Open `http://localhost:3000`.
 
-1. Push to GitHub
-2. Import repo on vercel.com → add the required env vars from `.env.example` (`NEXT_PUBLIC_SUPABASE_URL` or `NEXT_PUBLIC_SUPABASE_PROJECT_ID`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` or `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, one service-role server key, and Gemini key)
-3. Deploy — Root Directory: **blank**
+## Production Build
 
-## Supabase Setup
+```bash
+npm run lint
+npm run build
+npm run start
+```
 
-Run `supabase-schema.sql` in your Supabase project's SQL Editor.
+## Notes
 
-## Demo Students (password: `demo1234`)
-amina.yusuf · carlos.mendoza · priya.nair · kofi.mensah · linh.tran
-sara.alhassan · daniel.okafor · mei.zhang · javier.ruiz · fatima.noor
-All @students.bowiestate.edu
-
-## Tech Stack
-Next.js 14 · React 18 · Supabase (Auth + DB + Storage) · Google Gemini 2.0 Flash
+- This MVP currently outputs neutral stitch-plan formats (JSON/CSV) rather than vendor-specific embroidery binaries (`DST`, `PES`, etc.).
+- The digitizer prioritizes edge outlines and serpentine scan routing for fast preview and stable first-pass results.
