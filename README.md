@@ -20,13 +20,39 @@ npm run dev
 
 Open `http://localhost:3000`.
 
-## Production Build
+## Deploy on Vercel
+
+### Option A: Vercel Dashboard (fastest)
+1. Push this repo to GitHub/GitLab/Bitbucket.
+2. Go to [vercel.com/new](https://vercel.com/new) and import the repository.
+3. Keep default settings:
+   - **Framework Preset**: Next.js
+   - **Build Command**: `next build` (auto-detected)
+   - **Output Directory**: `.next` (auto)
+4. Click **Deploy**.
+
+### Option B: Vercel CLI
+```bash
+npm i -g vercel
+vercel login
+vercel
+```
+For production:
+```bash
+vercel --prod
+```
+
+## Production Checks (recommended before deploy)
 
 ```bash
-npm run lint
 npm run build
-npm run start
 ```
+
+## Environment Variables
+
+Core digitizer functionality on `/` does **not** require environment variables.
+
+If you use optional legacy routes/API integrations in this repo (e.g., Supabase/Gemini-powered pages), add their corresponding env vars in **Vercel Project Settings → Environment Variables** before deploying those features.
 
 ## Notes
 
